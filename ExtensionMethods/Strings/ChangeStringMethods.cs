@@ -8,6 +8,19 @@ namespace ValcomCore.ExtensionMethods.Strings
     public static class ChangeStringMethods
     {
 
+        public static readonly string[] GRAMMATICAL_PREPOSITIONS = {
+                "a", "à", "ao", "aos", "até", "afora",
+                "com", "como", "contra", "conforme", "consoante",
+                "da", "das", "de", "di", "do", "dos", "dum",  "desde", "desta", "durante", "daquilo",
+                "e", "é", "exceto",
+                "mediante","menos",
+                "na", "no", "nos", "neste", "nisso", "naquele", "numa",
+                "o",
+                "pra", "pro" ,"para",
+                "sem", "sob", "sobre","segundo",
+                "trás",
+                "visto"
+        };
 
 
         /// <summary>
@@ -21,29 +34,17 @@ namespace ValcomCore.ExtensionMethods.Strings
         /// </summary>
         public static string CapitalizeWords(this string value, params string[] ignore)
         {
-            if (!value.HasContent()) { return ""; }
-            value = value.ToLower();
-
-            // Palavras:
-            string[] words = value.Split(' ');
+            string[] words = value.Trim().ToLower().Split(' ');
             int totalWords = words.Length;
             value = string.Empty;
-
-            for (int i = 0; i < totalWords; i++)
+            foreach (string word in words)
             {
-                string word = words[i];
-                if (string.IsNullOrEmpty(word)) { continue; }
-
-                // Verificar se valor é uma palavra ignorável:
-                bool isIgnore = ignore.Contains(word);
-                if (isIgnore) { value = string.Concat(value, word, " "); continue; }
-
-                // Primeira Letra Maiúscula:
-                string letter = word[0].ToString().ToUpper();
-                word = string.Concat(letter, word.Substring(1));
-                value = string.Concat(value, word, " ");
+                if (string.IsNullOrEmpty(word)) { continue; }           
+                if (ignore.Contains(word)) { value = string.Concat(value, word, " "); continue; }
+                string firstLetter = word[0].ToString().ToUpper();
+                string newWord = string.Concat(firstLetter, word.Substring(1));
+                value = string.Concat(value, newWord, " ");
             }
-
             return value.Trim();
         }
 
